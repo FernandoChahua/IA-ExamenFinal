@@ -5,9 +5,9 @@ from nltk.text import Text
 ruta = 'datasets'
 archivo = 'positive_tweets.txt'
 lectordetexto = PlaintextCorpusReader(ruta,archivo,encoding='utf8')
-temp = lectordetexto.words()
+temp = lectordetexto.sents()
 texto = Text(temp)
-print(temp)
+print(texto)
 
 """
 print(texto.count('inteligencia'))
