@@ -15,11 +15,11 @@ np.random.seed(1)
 
 class SOM():
     def __init__(self, dimension):
-        self.rows = 10
-        self.cols = 10
+        self.rows = 20
+        self.cols = 20
         self.dimension = dimension
         self.factor = 0.5
-        self.iter = 1000
+        self.iter = 2000
         self.pesos = np.random.randn(self.rows, self.cols, self.dimension)
         self.mapa = np.empty(shape=(self.rows, self.cols), dtype=object)
         for i in range(self.rows):
