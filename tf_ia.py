@@ -42,9 +42,9 @@ def generate_bow(allsentences):
 
 
 
-negatives = open("datasets/negative_tweets.txt",'r',encoding='utf8').readlines()
-positives = open("datasets/positive_tweets.txt", 'r',encoding='utf8').readlines()
-input_data = []
+negatives = open("pos.txt",'r',encoding='utf8').readlines()
+positives = open("neg.txt", 'r',encoding='utf8').readlines()
+input_data = [] 
 tag = []
 for i in range(1000):
     input_data.append(negatives[i])
