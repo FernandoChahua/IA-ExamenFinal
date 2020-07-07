@@ -1,6 +1,7 @@
 # import statments
 import numpy as np
 import re
+import time
 import pandas as pd
 import random
 import nltk
@@ -18,21 +19,27 @@ def word_extraction(sentence):
 
 
 def interpret(sentence):
-    pos = "love good great nice like awesome happy well amaze best excite beautiful better cool enjoy cute funny fantastic perfect"
-    neg = "headache sad cancer out miss lost damn sick down bad off sorry hat poor suck never stupid hard gone hurt worst"
+    pos = "love good great nice like awesome happy well amaze best excite beautiful good cool enjoy cute funny fantastic perfect"
+    neg = "headache sad cancer out miss lose damn sick down bad off sorry hat poor suck never stupid hard gone hurt worst"
     vocab = pos + " " + neg
     vocab = vocab.split()
     words = word_extraction(sentence)
     bag_vector = np.zeros(len(vocab))
     flag = True
     for w in words:
-        lemmatize_word = lemmatizer.lemmatize(w, pos="v")
+        lemmatize_word = []
+        lemmatize_word.append(lemmatizer.lemmatize(w))
+        lemmatize_word.append(lemmatizer.lemmatize(w, pos="v"))
+        lemmatize_word.append(lemmatizer.lemmatize(w, pos="a"))
+        lemmatize_word.append(lemmatizer.lemmatize(w, pos="n"))
+        lemmatize_word.append(lemmatizer.lemmatize(w, pos="r"))
         for i, word in enumerate(vocab):
-            if word == lemmatize_word:
+            if word in lemmatize_word:
                 bag_vector[i] += 1
                 flag = False
-
-    print(bag_vector)
+    if(flag):
+        print(sentence)
+    #print(bag_vector)
     return bag_vector,flag
 
 

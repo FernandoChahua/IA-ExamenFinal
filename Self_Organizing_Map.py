@@ -19,7 +19,7 @@ class SOM():
         self.cols = 15
         self.dimension = dimension
         self.factor = 0.5
-        self.iter = 20000
+        self.iter = 25000
         self.pesos = np.random.randn(self.rows, self.cols, self.dimension)
         self.mapa = np.empty(shape=(self.rows, self.cols), dtype=object)
         for i in range(self.rows):
