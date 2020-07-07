@@ -33,6 +33,7 @@ def interpret(sentence):
         lemmatize_word.append(lemmatizer.lemmatize(w, pos="a"))
         lemmatize_word.append(lemmatizer.lemmatize(w, pos="n"))
         lemmatize_word.append(lemmatizer.lemmatize(w, pos="r"))
+
         for i, word in enumerate(vocab):
             if word in lemmatize_word:
                 bag_vector[i] += 1
