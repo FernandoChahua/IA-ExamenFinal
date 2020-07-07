@@ -27,12 +27,17 @@ def interpret(sentence):
     bag_vector = np.zeros(len(vocab))
     flag = True
     for w in words:
-        lemmatize_word = lemmatizer.lemmatize(w, pos="v")
+        lemmatize_word = []
+        lemmatize_word.append(lemmatizer.lemmatize(w, pos="v"))
+        lemmatize_word.append(lemmatizer.lemmatize(w, pos="a"))
+        lemmatize_word.append(lemmatizer.lemmatize(w, pos="n"))
+
         for i, word in enumerate(vocab):
-            if word == lemmatize_word:
+            if word in lemmatize_word:
                 bag_vector[i] += 1
                 flag = False
-
+    if(flag):
+        print(sentence)
     #print(bag_vector)
     return bag_vector,flag
 
