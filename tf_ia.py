@@ -24,20 +24,25 @@ def interpret(sentence):
     vocab = vocab.split()
     words = word_extraction(sentence)
     bag_vector = np.zeros(len(vocab))
+    flag = True
     for w in words:
         lemmatize_word = lemmatizer.lemmatize(w, pos="v")
         for i, word in enumerate(vocab):
             if word == lemmatize_word:
                 bag_vector[i] += 1
+                flag = False
 
     print(bag_vector)
-    return bag_vector
+    return bag_vector,flag
 
 
-def generate_bow(allsentences):
+def generate_bow(allsentences,tag):
     inputs = []
-    for sentence in allsentences:
-        inputs.append(interpret(sentence))
+    for i,sentence in enumerate(allsentences):
+        bag,flag = interpret(sentence)
+        inputs.append(bag)
+        if(flag):
+            tag[i] = 0
     return inputs
 
 
@@ -46,20 +51,20 @@ negatives = open("pos.txt",'r',encoding='utf8').readlines()
 positives = open("neg.txt", 'r',encoding='utf8').readlines()
 input_data = [] 
 tag = []
-for i in range(1000):
+for i in range(50):
     input_data.append(negatives[i])
-    tag.append(0)
-    input_data.append(positives[i])
     tag.append(1)
+    input_data.append(positives[i])
+    tag.append(2)
 
-data_input = np.array(generate_bow(input_data))
+data_input = np.array(generate_bow(input_data,tag))
 
 som = Self_Organizing_Map.SOM(43)
 som.process(data_input)
 som.tagging(data_input, tag)
 som.visualization()
 count = 0
-for i in range(100):
+for i in range(50):
     print(som.group(data_input[i]), tag[i])
     if som.group(data_input[i]) == tag[i]:
         count= count+ 1
