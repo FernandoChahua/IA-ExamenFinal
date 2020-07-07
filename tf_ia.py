@@ -32,7 +32,7 @@ def interpret(sentence):
                 bag_vector[i] += 1
                 flag = False
 
-    print(bag_vector)
+    #print(bag_vector)
     return bag_vector,flag
 
 
@@ -58,7 +58,7 @@ for i in range(50):
     tag.append(2)
 
 data_input = np.array(generate_bow(input_data,tag))
-
+print(tag)
 som = Self_Organizing_Map.SOM(43)
 som.process(data_input)
 som.tagging(data_input, tag)
