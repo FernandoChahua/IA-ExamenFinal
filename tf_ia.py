@@ -57,6 +57,7 @@ for i in range(1000):
     input_data.append(positives[i])
     tag.append(2)
 
+
 data_input = np.array(generate_bow(input_data[0:1000],tag,0))
 data_test = np.array(generate_bow(input_data[1000:2000],tag,1000))
 #print(tag)
