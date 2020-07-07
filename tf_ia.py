@@ -1,5 +1,5 @@
 # import statments
-import numpy
+import numpy as np
 import re
 import pandas as pd
 import random
@@ -20,7 +20,7 @@ def word_extraction(sentence):
 def interpret(sentence):
     vocab = "fuck nice like love amaze hate beautiful".split()
     words = word_extraction(sentence)
-    bag_vector = numpy.zeros(len(vocab))
+    bag_vector = np.zeros(len(vocab))
     for w in words:
         lemmatize_word = lemmatizer.lemmatize(w, pos="v")
         for i, word in enumerate(vocab):
@@ -38,20 +38,23 @@ def generate_bow(allsentences):
     return inputs
 
 
-# Using readlines()
 
-Lines = numpy.loadtxt("datasets/train_csv.txt", delimiter='&',usecols=[1],dtype='str',encoding='utf8')
-data_input = numpy.array(generate_bow(Lines[3000:5000]))
-tag = numpy.loadtxt("datasets/train_csv.txt",delimiter='&',usecols=[0],encoding='utf8',dtype=int)[3000:5000]
+negatives = open("datasets/negative_tweets.txt",'r',encoding='utf8').readlines()
+positives = open("datasets/positive_tweets.txt", 'r',encoding='utf8').readlines()
+input_data = []
+tag = []
+for i in range(500):
+    input_data.append(negatives[i])
+    tag.append(0)
+    input_data.append(positives[i])
+    tag.append(1)
+
+data_input = np.array(generate_bow(input_data))
 
 som = Self_Organizing_Map.SOM(7)
 som.process(data_input)
-som.tagging(data_input,tag)
+som.tagging(data_input, tag)
 som.visualization()
 
-for i in range(1000):
+for i in range(5):
     print(som.group(data_input[i]), tag[i])
-
-
-
-

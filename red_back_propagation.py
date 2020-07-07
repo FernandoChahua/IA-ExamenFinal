@@ -84,16 +84,4 @@ class Backprogation:
 
 iris_input = np.loadtxt("dataset.txt", delimiter=',', usecols=[0, 1, 2, 3])
 iris_output = np.loadtxt("dataset.txt", delimiter=',', usecols=[4])
-aux = np.array(iris_output)
 
-iris_output_matrix = []
-for i in range(len(aux)):
-    b = [aux[i]]
-    iris_output_matrix.append(b)
-
-Iris = Backprogation(iris_input, iris_output_matrix)
-Iris.mostar_datos_iniciales()
-print("-------------------------------------")
-Iris.entrenar()
-print("-------------------------------------")
-Iris.mostrar_datos_finales()
