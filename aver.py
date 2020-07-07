@@ -22,7 +22,7 @@ def get_top_n_words(corpus, n=None):
     words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
     return words_freq[:n]
 
-cars_for_sell = [line.replace("\n", "") for line in open("datasets/negative_tweets.txt",encoding='UTF8')]
-common_words = get_top_n_words(cars_for_sell, 500)
+cars_for_sell = [line.replace("\n", "") for line in open("pos.txt",encoding='UTF8')]
+common_words = get_top_n_words(cars_for_sell, 100)
 for word, freq in common_words:
     print(word, freq)
