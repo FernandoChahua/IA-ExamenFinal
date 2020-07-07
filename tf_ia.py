@@ -61,7 +61,7 @@ for i in range(1000):
 data_input = np.array(generate_bow(input_data[0:1000],tag,0))
 
 data_test = np.array(generate_bow(input_data[1000:2000],tag,1000))
-print(tag)
+#print(tag)
 
 som = Self_Organizing_Map.SOM(40)
 som.process(data_input)
