@@ -39,18 +39,17 @@ def generate_bow(allsentences):
 
 
 # Using readlines()
-file1 = open('datasets/train.txt', 'r', encoding='utf8')
-Lines = file1.readlines()
 
-data_input = numpy.array(generate_bow(Lines[0:10]))
-tag = numpy.array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0])
+Lines = numpy.loadtxt("datasets/train_csv.txt", delimiter='&',usecols=[1],dtype='str',encoding='utf8')
+data_input = numpy.array(generate_bow(Lines[3000:5000]))
+tag = numpy.loadtxt("datasets/train_csv.txt",delimiter='&',usecols=[0],encoding='utf8',dtype=int)[3000:5000]
 
 som = Self_Organizing_Map.SOM(7)
 som.process(data_input)
 som.tagging(data_input,tag)
 som.visualization()
 
-for i in range(10):
+for i in range(1000):
     print(som.group(data_input[i]), tag[i])
 
 
