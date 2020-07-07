@@ -19,8 +19,7 @@ def word_extraction(sentence):
 
 def interpret(sentence):
     pos = "love good great nice like awesome happy well amaze best excite beautiful better cool enjoy cute funny fantastic perfect"
-    #neg = "headache sad cancer out miss lost damn sick down bad off sorry hate poor suck never stupid hard gone hurt worst shit terrible wrong"
-    neg = "headache sad cancer out miss lost damn sick down bad off sorry hate poor suck never stupid hard gone hurt worst"
+    neg = "headache sad cancer out miss lost damn sick down bad off sorry hat poor suck never stupid hard gone hurt worst"
     vocab = pos + " " + neg
     vocab = vocab.split()
     words = word_extraction(sentence)
@@ -65,7 +64,6 @@ for i in range(1000):
 
 
 data_input = np.array(generate_bow(input_data[0:1000],tag,0))
-
 data_test = np.array(generate_bow(input_data[1000:2000],tag,1000))
 #print(tag)
 
