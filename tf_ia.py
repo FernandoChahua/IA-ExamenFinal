@@ -19,7 +19,8 @@ def word_extraction(sentence):
 
 def interpret(sentence):
     pos = "love good great nice like awesome happy well amaze best excite beautiful better cool enjoy cute funny fantastic perfect"
-    neg = "headache sad cancer out miss lost damn sick down bad off sorry hate poor suck never stupid hard gone hurt worst shit terrible wrong"
+    #neg = "headache sad cancer out miss lost damn sick down bad off sorry hate poor suck never stupid hard gone hurt worst shit terrible wrong"
+    neg = "headache sad cancer out miss lost damn sick down bad off sorry hate poor suck never stupid hard gone hurt worst"
     vocab = pos + " " + neg
     vocab = vocab.split()
     words = word_extraction(sentence)
@@ -36,36 +37,42 @@ def interpret(sentence):
     return bag_vector,flag
 
 
-def generate_bow(allsentences,tag):
+def generate_bow(allsentences,tag,pos):
     inputs = []
     for i,sentence in enumerate(allsentences):
         bag,flag = interpret(sentence)
         inputs.append(bag)
         if(flag):
-            tag[i] = 0
+            tag[i+pos] = 0
     return inputs
 
 
 
 negatives = open("datasets/negative_tweets.txt",'r',encoding='utf8').readlines()
 positives = open("datasets/positive_tweets.txt", 'r',encoding='utf8').readlines()
-input_data = []
+input_data = [] 
 tag = []
-for i in range(50):
+for i in range(1000):
     input_data.append(negatives[i])
     tag.append(1)
     input_data.append(positives[i])
     tag.append(2)
 
-data_input = np.array(generate_bow(input_data,tag))
-print(tag)
-som = Self_Organizing_Map.SOM(43)
+
+data_input = np.array(generate_bow(input_data[0:1000],tag,0))
+
+data_test = np.array(generate_bow(input_data[1000:2000],tag,1000))
+#print(tag)
+
+som = Self_Organizing_Map.SOM(40)
 som.process(data_input)
 som.tagging(data_input, tag)
 som.visualization()
 count = 0
-for i in range(50):
-    print(som.group(data_input[i]), tag[i])
-    if som.group(data_input[i]) == tag[i]:
-        count= count+ 1
+for i in range(1000):
+    
+    if som.group(data_test[i]) == tag[i+1000]:
+        count= count + 1
+    else:
+        print(som.group(data_test[i]), tag[i+1000])
 print(count)
