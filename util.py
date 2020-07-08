@@ -1,20 +1,15 @@
 import sklearn
 from sklearn.feature_extraction.text import * 
+from nltk.stem import WordNetLemmatizer
+
+lemmatizer = WordNetLemmatizer()
+word = "hated"
+lemmatize_word = [lemmatizer.lemmatize(word), lemmatizer.lemmatize(word, pos="v"),
+                          lemmatizer.lemmatize(word, pos="a"),lemmatizer.lemmatize(word, pos="n"),
+                          lemmatizer.lemmatize(word, pos="r")]
+print(lemmatize_word)
 
 def get_top_n_words(corpus, n=None):
-    """
-    List the top n words in a vocabulary according to occurrence in a text corpus.
-    
-    get_top_n_words(["I love Python", "Python is a language programming", "Hello world", "I love the world"]) -> 
-    [('python', 2),
-     ('world', 2),
-     ('love', 2),
-     ('hello', 1),
-     ('is', 1),
-     ('programming', 1),
-     ('the', 1),
-     ('language', 1)]
-    """
     vec = CountVectorizer().fit(corpus)
     bag_of_words = vec.transform(corpus)
     sum_words = bag_of_words.sum(axis=0) 
@@ -22,7 +17,8 @@ def get_top_n_words(corpus, n=None):
     words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
     return words_freq[:n]
 
-cars_for_sell = [line.replace("\n", "") for line in open("pos.txt",encoding='UTF8')]
+
+cars_for_sell = [line.replace("\n", "") for line in open("datasets/negative_tweets.txt",encoding='UTF8')]
 common_words = get_top_n_words(cars_for_sell, 100)
 for word, freq in common_words:
     print(word, freq)
