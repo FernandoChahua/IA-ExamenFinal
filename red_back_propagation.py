@@ -17,21 +17,22 @@ def sigmoid_derivative(x):
 errores = np.array(int)
 
 
-class Backprogation:
-    epocas = 50000
-    const_aprendizaje = 0.1
-    neuronasCapaEntrada = 4
-    neuronasCapaOculta = 4
-    neuronasCapaSalida = 1
-    salida = []
+class BackProgation:
 
-    def __init__(self, entradas, salidasEsperadas):
+    def __init__(self, entradas, salidas_esperadas, epocas=50000, const_aprendizaje=0.1, neuronas_capa_entrada=4,
+                 neuronas_capa_oculta=4, neuronas_capa_salida=1):
+        self.epocas = epocas
+        self.const_aprendizaje = const_aprendizaje
+        self.neuronas_capa_entrada = neuronas_capa_entrada
+        self.neuronas_capa_oculta = neuronas_capa_oculta
+        self.neuronas_capa_salida = neuronas_capa_salida
+        self.salida = []
         self.entradas = entradas
-        self.salidasEsperada = salidasEsperadas
-        self.pesos_capaOculta = np.random.uniform(size=(self.neuronasCapaEntrada, self.neuronasCapaOculta))
-        self.bias_capaOculta = np.random.uniform(size=(1, self.neuronasCapaOculta))
-        self.pesos_capaSalida = np.random.uniform(size=(self.neuronasCapaOculta, self.neuronasCapaSalida))
-        self.bias_capaSalida = np.random.uniform(size=(1, self.neuronasCapaSalida))
+        self.salidas_esperadas = salidas_esperadas
+        self.pesos_capaOculta = np.random.uniform(size=(self.neuronas_capa_entrada, self.neuronas_capa_oculta))
+        self.bias_capaOculta = np.random.uniform(size=(1, self.neuronas_capa_oculta))
+        self.pesos_capaSalida = np.random.uniform(size=(self.neuronas_capa_oculta, self.neuronas_capa_salida))
+        self.bias_capaSalida = np.random.uniform(size=(1, self.neuronas_capa_salida))
 
     def mostar_datos_iniciales(self):
         print("Pesos iniciales de la capa oculta: \n", end='')
@@ -57,7 +58,7 @@ class Backprogation:
             self.salida = predicted_output
 
             # Backpropagation
-            error = self.salidasEsperada - predicted_output
+            error = self.salidas_esperadas - predicted_output
             d_predicted_output = error * sigmoid_derivative(predicted_output)
 
             error_hidden_layer = d_predicted_output.dot(self.pesos_capaSalida.T)
@@ -80,8 +81,3 @@ class Backprogation:
         print(self.bias_capaSalida)
         print("\nSalidas de la red neuronal luego de 10,000 epocas: \n", end='   ')
         print(self.salida)
-
-
-iris_input = np.loadtxt("dataset.txt", delimiter=',', usecols=[0, 1, 2, 3])
-iris_output = np.loadtxt("dataset.txt", delimiter=',', usecols=[4])
-

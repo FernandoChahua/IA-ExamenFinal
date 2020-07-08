@@ -1,30 +1,21 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[86]:
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 
 np.random.seed(1)
 
 
-# In[87]:
-
-
-class SOM():
-    def __init__(self, dimension):
-        self.rows = 15
-        self.cols = 15
-        self.dimension = dimension
-        self.factor = 0.5
-        self.iter = 25000
-        self.pesos = np.random.randn(self.rows, self.cols, self.dimension)
-        self.mapa = np.empty(shape=(self.rows, self.cols), dtype=object)
+class SOM:
+    def __init__(self, dim, generations=14000, factor=0.5, rows=10, cols=10):
+        self.rows = rows
+        self.cols = cols
+        self.dim = dim
+        self.factor = factor
+        self.generations = generations
+        self.weights = np.random.randn(self.rows, self.cols, self.dim)
+        self.map = np.empty(shape=(self.rows, self.cols), dtype=object)
         for i in range(self.rows):
             for j in range(self.cols):
-                self.mapa[i][j] = []
+                self.map[i][j] = []
 
     def euc_dist(self, v1, v2):
         return np.linalg.norm(v1 - v2)
@@ -33,7 +24,8 @@ class SOM():
         return np.abs(r1 - r2) + np.abs(c1 - c2)
 
     def most_common(self, lst, n):
-        if len(lst) == 0: return -1
+        if len(lst) == 0:
+            return 0
 
         counts = np.zeros(shape=n, dtype=np.int)
 
@@ -41,48 +33,47 @@ class SOM():
             counts[lst[i]] += 1
         return np.argmax(counts)
 
-    def minimoNodo(self, dato):
+    def min_nodo(self, dato):
         result = (0, 0)
-        distanciaMinima = 1.0e20
+        minDistance = 1.0e20
         for i in range(self.rows):
             for j in range(self.cols):
-                ed = self.euc_dist(self.pesos[i][j], dato)
-                if ed < distanciaMinima:
-                    distanciaMinima = ed
+                ed = self.euc_dist(self.weights[i][j], dato)
+                if ed < minDistance:
+                    minDistance = ed
                     result = (i, j)
         return result
 
     def process(self, data):
-        rangoMax = self.rows + self.cols
+        maxRange = self.rows + self.cols
 
-        for s in range(self.iter):
-            alfa = 1.0 - (s * 1.0) / self.iter
-            alfaActual = alfa * self.factor
-            rangoActual = (int)(alfa * rangoMax)
+        for s in range(self.generations):
+            alpha = 1.0 - (s * 1.0) / self.generations
+            actualAlpha = alpha * self.factor
+            actualRange = int(alpha * maxRange)
             t = np.random.randint(len(data))
-            (bmu_row, bmu_col) = self.minimoNodo(data[t])
+            (bmu_row, bmu_col) = self.min_nodo(data[t])
             for i in range(self.rows):
                 for j in range(self.cols):
-                    if self.manhattan_dist(bmu_row, bmu_col, i, j) < rangoActual:
-                        self.pesos[i][j] = self.pesos[i][j] + alfaActual * (data[t] - self.pesos[i][j])
+                    if self.manhattan_dist(bmu_row, bmu_col, i, j) < actualRange:
+                        self.weights[i][j] = self.weights[i][j] + actualAlpha * (data[t] - self.weights[i][j])
 
     def tagging(self, data, tag):
         for t in range(len(data)):
-            (m_row, m_col) = self.minimoNodo(data[t])
-            self.mapa[m_row][m_col].append(tag[t])
+            (m_row, m_col) = self.min_nodo(data[t])
+            self.map[m_row][m_col].append(tag[t])
 
     def visualization(self):
-        label_pesos = np.zeros(shape=(self.rows, self.cols), dtype=np.int)
+        label_weights = np.zeros(shape=(self.rows, self.cols), dtype=np.int)
 
         for i in range(self.rows):
             for j in range(self.cols):
-                label_pesos[i][j] = self.most_common(self.mapa[i][j], 20)
+                label_weights[i][j] = self.most_common(self.map[i][j], 20)
 
-        plt.imshow(label_pesos)
+        plt.imshow(label_weights)
         plt.colorbar()
         plt.show()
 
     def group(self, dato):
-        (g_row, g_col) = self.minimoNodo(dato)
-        return self.most_common(self.mapa[g_row][g_col], 40)
-
+        (g_row, g_col) = self.min_nodo(dato)
+        return self.most_common(self.map[g_row][g_col], 40)
