@@ -15,9 +15,6 @@ def sigmoid_derivative(x):
     return x * (1 - x)
 
 
-
-
-
 # Clase de BackPropagation con sus metodos
 class BackProgation:
     def __init__(self, entradas, salidas_esperadas, epocas=24000, const_aprendizaje=0.1, neuronas_capa_entrada=4,
