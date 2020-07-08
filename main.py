@@ -86,3 +86,13 @@ for i, word_interpret in enumerate(data_test):
     print("RED NEURONAL 3(Capas 30):", back_propagation3.predecir([word_interpret]))
     print("RED NEURONAL 4(Capas 40):", back_propagation4.predecir([word_interpret]))
     print("-------------------------------------------------------------------------")
+
+while True:
+    print("Ingrese el texto a probar => ")
+    texto = input()
+    print("RESULTADOS:")
+    print("RED NEURONAL 1(Capas 10):", back_propagation1.predecir([nlp.interpret(texto)[0]]))
+    print("RED NEURONAL 2(Capas 20):", back_propagation2.predecir([nlp.interpret(texto)[0]]))
+    print("RED NEURONAL 3(Capas 30):", back_propagation3.predecir([nlp.interpret(texto)[0]]))
+    print("RED NEURONAL 4(Capas 40):", back_propagation4.predecir([nlp.interpret(texto)[0]]))
+    print("-----------------------------------------------------------")
