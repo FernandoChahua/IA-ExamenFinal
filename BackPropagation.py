@@ -5,17 +5,24 @@ import copy
 import time
 from matplotlib import pyplot as plt
 
-#Metodos para hallar la funcion sigmoidea
+
+# Metodos para hallar la funcion sigmoidea
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
-    
+
+
 def sigmoid_derivative(x):
     return x * (1 - x)
 
-#Clase de BackPropagation con sus metodos
+
+
+
+
+# Clase de BackPropagation con sus metodos
 class BackProgation:
-    def __init__(self, entradas, salidas_esperadas, epocas=10000, const_aprendizaje=0.1, neuronas_capa_entrada=4,
+    def __init__(self, entradas, salidas_esperadas, epocas=24000, const_aprendizaje=0.1, neuronas_capa_entrada=4,
                  neuronas_capa_oculta=4, neuronas_capa_salida=1):
+        np.random.seed(1)
         self.epocas = epocas
         self.const_aprendizaje = const_aprendizaje
         self.neuronas_capa_entrada = neuronas_capa_entrada
@@ -30,7 +37,7 @@ class BackProgation:
         self.bias_capaSalida = np.random.uniform(size=(1, self.neuronas_capa_salida))
         self.errores = []
 
-    #Muestra los datos iniciales de la red
+    # Muestra los datos iniciales de la red
     def mostar_datos_iniciales(self):
         print("Pesos iniciales de la capa oculta: \n", end='')
         print(*self.pesos_capaOculta)
@@ -41,7 +48,7 @@ class BackProgation:
         print("BIAS inicial de la capa de salida: \n", end='')
         print(*self.bias_capaSalida)
 
-    #Entrena la red una cantidad de epocas
+    # Entrena la red una cantidad de epocas
     def entrenar(self):
         for _ in range(self.epocas):
             # Forward Propagation - Avanza hacia adelante
@@ -69,7 +76,7 @@ class BackProgation:
             self.pesos_capaOculta += self.entradas.T.dot(d_hidden_layer) * self.const_aprendizaje
             self.bias_capaOculta += np.sum(d_hidden_layer) * self.const_aprendizaje
 
-    #Muestra los datos finales y resultados obtenidos del entrenamiento
+    # Muestra los datos finales y resultados obtenidos del entrenamiento
     def mostrar_datos_finales(self):
         print("Peso finales de la capa oculta: \n", end='')
         print(self.pesos_capaOculta)
@@ -83,10 +90,10 @@ class BackProgation:
         print(self.salida)
         print("Errores cuadraticos medios de las epocas\n")
         print(self.errores)
-    
-    #Predice el tipo de sentimiento al que pertenece la oracion, entre Positivo - Negativo - Neutro
+
+    # Predice el tipo de sentimiento al que pertenece la oracion, entre Positivo - Negativo - Neutro
     def predecir(self, sentence):
-        #Realiza el proceso de avance en la neurona ya entrenada para hallar el resultado
+        # Realiza el proceso de avance en la neurona ya entrenada para hallar el resultado
         hidden_layer_activation = np.dot(sentence, self.pesos_capaOculta)
         hidden_layer_activation += self.bias_capaOculta
         hidden_layer_output = sigmoid(hidden_layer_activation)
@@ -96,42 +103,37 @@ class BackProgation:
 
         predicted_output = sigmoid(output_layer_activation)
 
-        #El resultado devuelto lo clasificamos para que devuelta si es de tipo Positivo - Negativo - Neutro
+        # El resultado devuelto lo clasificamos para que devuelva si es de tipo Positivo - Negativo - Neutro
         menordist = 500000
         resultados = [0.0, 0.5, 1.0]
         salida = 0
-        for i,item in enumerate(resultados):
+        for i, item in enumerate(resultados):
             if abs(predicted_output - item) < menordist:
                 menordist = abs(predicted_output - item)
                 salida = i
         prediccion = "Neutral"
-        if(salida == 1):
+        if (salida == 1):
             prediccion = "Negativo"
-        elif(salida == 2):
+        elif (salida == 2):
             prediccion = "Positivo"
         return prediccion
 
-    #Devuelve el error medio del arreglo de errores generado en el BackPropagation
+    # Devuelve el error medio del arreglo de errores generado en el BackPropagation
     def errormedio(self, listaError):
         suma = 0
         for item in listaError:
-            suma = suma + pow(item,2)
+            suma = suma + pow(item, 2)
         suma = suma / len(listaError)
         return math.sqrt(suma)
 
-    #Grafica el error cuadratico medio para comparar resultados
-    def graficar_error(self):
-        print(type(self.errores))
-        x= np.arange(0,self.epocas,1)
+    # Grafica el error cuadratico medio para comparar resultados
+    def graficar_error(self, titulo="RED BACKPROPAGATION"):
+        x = np.arange(0, self.epocas, 1)
         self.errores = np.array(self.errores)
-        print(type(self.errores))
-        y= self.errores[x]
-        plt.plot(x,y)
+        y = self.errores[x]
+        plt.plot(x, y)
         plt.xlabel('x')
         plt.ylabel('y')
-        plt.title('Lab DLS')
+        plt.title(titulo)
         plt.show()
-
-
-
-       
+        print(self.errores[len(self.errores) - 1])
