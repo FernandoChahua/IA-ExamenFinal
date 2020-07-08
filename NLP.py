@@ -7,15 +7,13 @@ import random
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import WordNetLemmatizer
-import Self_Organizing_Map
-from red_back_propagation import BackProgation
 
 
 class NLPSimpleText:
     def __init__(self):
         self.lemmatizer = WordNetLemmatizer()
         pos = "love good great nice like awesome happy well amaze best excite beautiful good cool enjoy cute funny fantastic perfect"
-        neg = "headache sad cancer out miss lose damn sick down bad off sorry hat poor suck never stupid hard gone hurt worst"
+        neg = "headache sad cancer out miss lose damn sick down bad off sorry hate poor suck never stupid hard gone hurt worst"
         vocab = pos + " " + neg
         self.vocab = vocab.split()
 
@@ -56,43 +54,3 @@ class NLPSimpleText:
         return inputs
 
 
-nlp = NLPSimpleText()
-
-negatives = open("datasets/negative_tweets.txt", 'r', encoding='utf8').readlines()
-positives = open("datasets/positive_tweets.txt", 'r', encoding='utf8').readlines()
-input_data = []
-tag = []
-for i in range(1000):
-    input_data.append(negatives[i])
-    tag.append(1)
-    input_data.append(positives[i])
-    tag.append(2)
-
-data_input = np.array(nlp.generate_bow(input_data[0:1000], tag, 0))
-data_test = np.array(nlp.generate_bow(input_data[1000:2000], tag, 1000))
-# print(tag)
-
-som = Self_Organizing_Map.SOM(40)
-som.process(data_input)
-som.tagging(data_input, tag)
-som.visualization()
-count = 0
-
-input_data_back_propagation = data_test
-output_data_back_propagation = []
-
-for i in range(1000):
-    if som.group(data_test[i]) == tag[i + 1000]:
-        count = count + 1
-    output_data_back_propagation.append([som.group(data_test[i]) / 2])
-output_data_back_propagation = np.array(output_data_back_propagation)
-print(output_data_back_propagation[0:10])
-print(input_data_back_propagation[0:10])
-print(len(output_data_back_propagation))
-print(len(input_data_back_propagation))
-
-back_propagation = BackProgation(input_data_back_propagation, output_data_back_propagation, neuronas_capa_entrada=40,
-                                 neuronas_capa_salida=1, neuronas_capa_oculta=20)
-back_propagation.entrenar()
-
-print(count)
